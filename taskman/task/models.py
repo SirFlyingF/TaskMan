@@ -20,6 +20,10 @@ class Task(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=choices_as_tuple, default='To Do')
 
+    #table name
+    # need to see relevent data for tasks
+    # null=True, blank=True
+    
     def get_absolute_url(self):
         # Returns the url for the task-detail url with pk passed
         # Called by CreateView on success. Alternatively can

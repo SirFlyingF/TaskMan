@@ -8,3 +8,10 @@ urlpatterns = [
     path('delete/<int:pk>', TaskDeleteView.as_view(), name='task-delete'),
     path('create/', TaskCreateView.as_view(), name='task-create')
 ]
+
+
+
+#301 -> response code
+'''response codes required for us
+    3xx -4Xx 5XX - imp
+    2XX - good to know'''

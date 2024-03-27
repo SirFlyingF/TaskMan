@@ -1,4 +1,7 @@
+from typing import Any
+from django.db.models.query import QuerySet
 from django.shortcuts import render
+from django.contrib.auth.models import User
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 from .models import Task, STATUS_CHOICES
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -17,11 +20,24 @@ class TaskListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context.update({"statuses": STATUS_CHOICES, 'cols':12//len(STATUS_CHOICES)})
         return context
+    
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return Task.objects.all()
+        return Task.objects.filter(user=self.request.user)
 
 
-class TaskDetailView(LoginRequiredMixin, DetailView):
+class TaskDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Task
     template_name = 'task/detail.html'
+
+    def test_func(self):
+        ''' the test that UserPassesTestMixin calls'''
+        task = self.get_object()
+        uzr = self.request.user
+        if task.user == uzr or uzr.is_superuser:
+            return True
+        return False
 
 
 class TaskUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -31,7 +47,8 @@ class TaskUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         ''' the test that UserPassesTestMixin calls'''
         task = self.get_object()
-        if task.user == self.request.user:
+        uzr = self.request.user
+        if task.user == uzr or uzr.is_superuser:
             return True
         return False
 
@@ -43,7 +60,8 @@ class TaskDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         ''' the test that UserPassesTestMixin calls'''
         task = self.get_object()
-        if task.user == self.request.user:
+        uzr = self.request.user
+        if task.user == uzr or uzr.is_superuser:
             return True
         return False
 
@@ -52,6 +70,7 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
     model = Task
     fields = ['title', 'description', 'status']
     success_url = '/task/home/'
+    
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)

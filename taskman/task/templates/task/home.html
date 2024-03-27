@@ -3,7 +3,7 @@
   <!-- <div class="row"> -->
     {% for status in statuses %}
       <div class="col-md-{{ cols }}">
-        <h3>{{ status }}</h3>
+        <h3 class="text-muted">{{ status }}</h3>
           {% for task in tasks %}
             {% if task.status == status %}
               <article class="media content-section">
@@ -13,7 +13,7 @@
                     <small class="text-muted">{{ task.created_at|date:"F d, Y" }}</small>
                   </div>
                   <h2><a class="article-title" href="{% url 'task-detail' task.id %}">{{ task.title }}</a></h2>
-                  <p class="article-content">{{ task.status }}</p>
+                  <!-- <p class="article-content">{{ task.status }}</p> -->
                 </div>
               </article>
             {% endif %}

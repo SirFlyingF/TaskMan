@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+load_dotenv('.env')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,8 +35,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'task.apps.TaskConfig',
-    'users.apps.UsersConfig',
+    'task',
+    'users',
     'crispy_forms',
     'crispy_bootstrap4',
     'django.contrib.admin',
@@ -81,9 +84,13 @@ WSGI_APPLICATION = 'taskman.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    'default' : {
+        'ENGINE' : "django.db.backends.mysql",
+        'NAME' : os.getenv('DBNAME'),
+        'USER' : os.getenv('DBUSER'),
+        'PASSWORD' : os.getenv('DBPASSWORD'),
+        'HOST' : os.getenv('DBHOST'),
+        'PORT' : os.getenv('DBPORT'),
     }
 }
 
@@ -140,7 +147,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 
 # URL to redirect on successful login
 LOGIN_REDIRECT_URL = 'profile'
-# URL to redirect failing is authenticated
+# URL to redirect failing is_authenticated
 # check on login required view
 LOGIN_URL = 'login'
 
