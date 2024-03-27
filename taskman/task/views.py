@@ -3,11 +3,12 @@ from django.db.models.query import QuerySet
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
-from .models import Task, STATUS_CHOICES
+from .models import Task, Statuses
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Create your views here.
 
+STATUS_CHOICES = [label for values, label in Statuses.choices]
 
 class TaskListView(LoginRequiredMixin, ListView):
     model = Task
@@ -18,7 +19,7 @@ class TaskListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({"statuses": STATUS_CHOICES, 'cols':12//len(STATUS_CHOICES)})
+        context.update({"statuses": Statuses.choices, 'cols':12//len(STATUS_CHOICES)})
         return context
     
     def get_queryset(self):

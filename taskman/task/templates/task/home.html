@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
   <!-- <div class="row"> -->
-    {% for status in statuses %}
+    {% for status_val, status_label in statuses %}
       <div class="col-md-{{ cols }}">
-        <h3 class="text-muted">{{ status }}</h3>
+        <h3 class="text-muted">{{ status_label }}</h3>
           {% for task in tasks %}
-            {% if task.status == status %}
+            {% if task.status == status_val %}
               <article class="media content-section">
                 <div class="media-body">
                   <div class="article-metadata">
