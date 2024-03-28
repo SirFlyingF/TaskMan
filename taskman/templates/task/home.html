@@ -10,7 +10,7 @@
                 <div class="media-body">
                   <div class="article-metadata">
                     <a class="mr-2" href="{% url 'profile' %}">{{ task.user }}</a>
-                    <small class="text-muted">{{ task.created_at|date:"F d, Y" }}</small>
+                    <small class="text-muted">{{ task.created_at|date:"F d, Y : h:m" }}</small>
                   </div>
                   <h2><a class="article-title" href="{% url 'task-detail' task.id %}">{{ task.title }}</a></h2>
                   <!-- <p class="article-content">{{ task.status }}</p> -->
